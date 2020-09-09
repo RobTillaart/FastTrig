@@ -2,7 +2,7 @@
 //
 //    FILE: fastTrig.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.3
+// VERSION: 0.1.4
 // PURPOSE: Arduino library for a faster approximation of sin() and cos()
 //    DATE: 2011-08-18
 //     URL: https://github.com/RobTillaart/fastTrig
@@ -13,14 +13,18 @@
 // 0.1.01   2011-08-18 improved tables a bit + changed param to float
 // 0.1.02   2011-08-20 added interpolation
 //          eons passed
-// 0.1.1    2020-08-30 refactor, create a library. isin() & icos() are OK.   itan() is bad.
+// 0.1.1    2020-08-30 refactor, create a library out of it.  itan() approximation is bad.
 // 0.1.2    2020-09-06 optimize 16 bit table with example sketch
-// 0.1.3    2020-09-07 initial release.   itan() still bad
+// 0.1.3    2020-09-07 initial release.
+// 0.1.4    2020-09-08 rewrite itan() + cleanup + examples
+
 
 #include "Arduino.h"
 
+
 // 91 x 2 bytes ==> 182 bytes
-unsigned int isinTable16[] = {
+// use 65535.0 as divider
+uint16_t isinTable16[] = {
   0,
   1145, 2289, 3435, 4571, 5715, 6852, 7988, 9125, 10254, 11385,
   12508, 13630, 14745, 15859, 16963, 18067, 19165, 20253, 21342, 22416,
@@ -34,6 +38,7 @@ unsigned int isinTable16[] = {
   65535
 };
 
+// use 255.0 as divider
 uint8_t isinTable8[] = { 
   0, 4, 9, 13, 18, 22, 27, 31, 35, 40, 44,
   49, 53, 57, 62, 66, 70, 75, 79, 83, 87,
@@ -74,69 +79,75 @@ float isin(float f)
     y = 180 - y;
     if (r != 0)
     {
-      r = 256 - r;
+      r = 255 - r;
       y--;
     }
   }
 
+  // float v  improves ~4% on avg error  for ~60 bytes.
   uint16_t v = isinTable16[y];
+  
   // interpolate if needed
-  if (r > 0) v = v + ((isinTable16[y + 1] - v)/8 * r) /32;   //  == * r / 256
-  if (pos) return v * 0.0000152590219; // = /65535.0
-  return v * -0.0000152590219 ;
+  if (r > 0) 
+  {
+    v = v + ((isinTable16[y + 1] - v) / 8 * r) /32;   //  == * r / 256
+  }
+  float g = v * 0.0000152590219; // = /65535.0
+  if (pos) return g;
+  return -g;
 }
-
 
 float icos(float x)
 {
-  return isin(x + 90);
+  // prevent modulo math if x in 0..360
+  return isin(x - 270.0);  // better than x + 90;
 }
 
-// x = -90..90
-float itan(float x)
+
+float itan(float f)
 {
   // reference
-  return isin(x)/icos(x);
-}
+  // return isin(f)/icos(f);
+  
+  // idea is to divide two (interpolated) values from the table 
+  // so no divide by 65535
+  
+  // FOLDING
+  bool neg = (f < 0);
+  bool mir = false;
+  if (neg) f = -f;
 
-// experimental floating point interpolation
-float fsin(float d)
-{
-  // interpolate
-  int dd = int(d);
-  float a = isin(dd);
-  float frac = d - dd;
-  if (frac > 0)
+  long x = f;
+  float rem = f - x;
+  float v = x % 180 + rem;  // normalised value 0..179.9999
+  if (v > 90)
   {
-    float b = isin(d + 1);
-    a += frac * (b - a);
+    v = 180 - v;
+    neg = !neg;
+    mir = true;
   }
-  return a;
+  uint8_t d = v;
+  if (d == 90) return 0;
+
+  // COS FIRST
+  uint8_t p = 90 - d;
+  float co = isinTable16[p];
+  if (rem != 0)
+  {
+    float delta = (isinTable16[p] - isinTable16[p - 1]);
+    if (mir) co = isinTable16[p - 1] + rem * delta;
+    else     co = isinTable16[p]     - rem * delta;
+  }
+  if (co == 0) return 0;
+
+  float si = isinTable16[d];
+  if (rem != 0) si += rem * (isinTable16[d + 1]  - isinTable16[d]);
+
+  float ta = si/co;
+  if (neg) return -ta;
+  return ta;
 }
 
-/////////////////////////////////////////////////////////////
-//
-// Code for generating the initial tables   (use the example to optimize for interpolation)
-//
-//  Serial.println("unsigned int isinTable[] = { ");
-//  for (int i = 0; i <= 90; i++)
-//  {
-//    uint16_t  x = round(sin(i * PI /180) * 65535);
-//    Serial.print(x);
-//    Serial.print(", ");
-//    if (i % 10 == 0) { Serial.println(); Serial.print("  "); }
-//  }
-//  Serial.println("}; ");
-
-//  Serial.println("uint8_t isinTable[] = { ");
-//  for (int i = 0; i <= 90; i++)
-//  {
-//    uint16_t  x = round(sin(i * PI /180) * 255);
-//    Serial.print(x);
-//    Serial.print(", ");
-//    if (i % 10 == 0) { Serial.println(); Serial.print("  "); }
-//  }
-//  Serial.println("}; ");
 
 
 // -- END OF FILE --

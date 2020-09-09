@@ -1,21 +1,12 @@
 //
-//    FILE: fastTrig.ino
+//    FILE: fastTrig_test1.ino
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.1
+// VERSION: 0.1.2
 // PURPOSE: testing the fastTrigonio functions
 //    DATE: 2020-08-30
 //    (c) : MIT
 //
 
-/*
-   On AVR
-   ISIN 2.72 x faster
-   ICOS 2.19 x faster
-   ITAN 1.14 x faster (rel error < 1% for 0 .. 89.8°)
-
-   On ESP32
-   6 - 9 x faster
-*/
 
 #include "FastTrig.h"
 
@@ -31,23 +22,20 @@ void setup()
 
   test_hw_support();
 
-  test_sin_cos_tan();
-  test_isin_icos_itan();
+  test_sin_cos_tan(0);
+  test_isin_icos_itan(0);
+  test_sin_cos_tan(720);
+  test_isin_icos_itan(720);
 
-  test_isin_error_1(false);
+  test_isin_error_1(false);  // parameter true gives a more info
   test_icos_error_1(false);
-
-  // fsin is expensive...
-  test_fsin();
-  test_fsin_error_3(false);
-  test_fsin_error_4(false);
-
-  test_itan_error_1(true);  // TODO not happy on AVR
+  test_itan_error_1(false);
 
   Serial.println("done...\n");
 }
 
-bool test_hw_support()
+
+bool test_hw_support()        // to be elaborated
 {
   Serial.println(__FUNCTION__);
   int n = random(350);
@@ -60,16 +48,18 @@ bool test_hw_support()
   Serial.println(d1);
   Serial.println(d2);
   Serial.println();
-  return (d1 / d2) < 1.5; // just a guess.
+  return (d1 / d2) < 1.5; // just a guess for now.
 }
 
-void test_sin_cos_tan()
+
+void test_sin_cos_tan(int n)
 {
   Serial.println(__FUNCTION__);
-  Serial.println("SIN\tCOS\tTAN\t360 calls" );
+  Serial.print("SIN\tCOS\tTAN\t360 calls - offset: " );
+  Serial.println(n);
   delay(10);
   start = micros();
-  for ( i = 0; i < 360; i++)
+  for ( i = n; i < n + 360; i++)
   {
     x = sin(i);
   }
@@ -78,7 +68,7 @@ void test_sin_cos_tan()
   delay(10);
 
   start = micros();
-  for ( i = 0; i < 360; i++)
+  for ( i = n; i < n + 360; i++)
   {
     x = cos(i);
   }
@@ -87,7 +77,7 @@ void test_sin_cos_tan()
   delay(10);
 
   start = micros();
-  for ( i = 0; i < 360; i++)
+  for ( i = n; i < n + 360; i++)
   {
     x = tan(i);
   }
@@ -97,13 +87,15 @@ void test_sin_cos_tan()
   delay(10);
 }
 
-void test_isin_icos_itan()
+
+void test_isin_icos_itan(int n)
 {
   Serial.println(__FUNCTION__);
-  Serial.println("ISIN\tICOS\tITAN\t360 calls");
+  Serial.print("ISIN\tICOS\tITAN\t360 calls - offset: " );
+  Serial.println(n);
   delay(10);
   start = micros();
-  for ( i = 0; i < 360; i++)
+  for ( i = n; i < n + 360; i++)
   {
     x = isin(i);
   }
@@ -112,7 +104,7 @@ void test_isin_icos_itan()
   delay(10);
 
   start = micros();
-  for ( i = 0; i < 360; i++)
+  for ( i = n; i < n + 360; i++)
   {
     x = icos(i);
   }
@@ -121,7 +113,7 @@ void test_isin_icos_itan()
   delay(10);
 
   start = micros();
-  for ( i = 0; i < 360; i++)
+  for ( i = n; i < n + 360; i++)
   {
     x = itan(i);
   }
@@ -131,19 +123,6 @@ void test_isin_icos_itan()
   delay(10);
 }
 
-void test_fsin()
-{
-  Serial.println(__FUNCTION__);
-  Serial.print("FSIN 360 calls: \t");
-  start = micros();
-  for ( i = 0; i < 360; i++)
-  {
-    x = fsin(i);
-  }
-  Serial.println((micros() - start) / 360.0);
-  Serial.println();
-  delay(10);
-}
 
 void test_isin_error_1(bool show)
 {
@@ -152,13 +131,16 @@ void test_isin_error_1(bool show)
   delay(10);
 
   float mx = 0;
+  float mxr = 0;
   float z = 0;
-  for ( i = 0; i < 3600; i++)
+  float zz = 0;
+  for ( i = 0; i <= 3600; i++)
   {
     float a = sin(i * 0.1 * PI / 180);
     float b = isin(i * 0.1);
     float y = abs(a - b);
     z += y;
+    if (a > 0) zz += y / a; // not 100% correct but almost.
     if (mx < y)
     {
       mx = y;
@@ -173,14 +155,32 @@ void test_isin_error_1(bool show)
         Serial.println(a - b, 6);
       }
     }
+    if (abs(a) > 0.00001 && mxr < y / a)
+    {
+      //      Serial.print(i);
+      //      Serial.print('\t');
+      //      Serial.print(a, 6);
+      //      Serial.print('\t');
+      //      Serial.print(b, 6);
+      //      Serial.print('\t');
+      //      Serial.print(y/a, 6);
+      //      Serial.println();
+      mxr = y / a;
+    }
   }
-  Serial.print("max error: ");
+  Serial.print("max abs error: ");
   Serial.println(mx, 8);
-  Serial.print("avg error: ");
+  Serial.print("avg abs error: ");
   Serial.println(z / 3600, 8);
+  Serial.print("max rel error: ");
+  Serial.println(mxr, 8);
+  Serial.print("avg rel error: ");
+  Serial.println(zz / 3600, 8);
+  Serial.println();
   Serial.println();
   delay(10);
 }
+
 
 void test_icos_error_1(bool show)
 {
@@ -189,13 +189,16 @@ void test_icos_error_1(bool show)
   delay(10);
 
   float mx = 0;
+  float mxr = 0;
   float z = 0;
+  float zz = 0;
   for ( i = 0; i < 3600; i++)
   {
     float a = cos(i * 0.1 * PI / 180);
     float b = icos(i * 0.1);
     float y = abs(a - b);
     z += y;
+    if (a > 0) zz += y / a; // not 100% correct but almost.
     if (mx < y)
     {
       mx = y;
@@ -210,89 +213,27 @@ void test_icos_error_1(bool show)
         Serial.println(a - b, 6);
       }
     }
+    if (abs(a) > 0.00001 && mxr < y / a)
+    {
+      //      Serial.print(i);
+      //      Serial.print('\t');
+      //      Serial.print(a, 6);
+      //      Serial.print('\t');
+      //      Serial.print(b, 6);
+      //      Serial.print('\t');
+      //      Serial.print(y/a, 6);
+      //      Serial.println();
+      mxr = y / a;
+    }
   }
-
-  Serial.print("max error: ");
+  Serial.print("max abs error: ");
   Serial.println(mx, 8);
-  Serial.print("avg error: ");
+  Serial.print("avg abs error: ");
   Serial.println(z / 3600, 8);
-  Serial.println();
-  Serial.println();
-  delay(10);
-}
-
-void test_fsin_error_3(bool show)
-{
-  Serial.println(__FUNCTION__);
-  Serial.println("FSIN 0-3600 calls: \t");
-  delay(10);
-
-  float mx = 0;
-  float z = 0;
-  for ( i = 0; i < 3600; i++)
-  {
-    float a = sin(i * 0.1 * PI / 180);
-    float b = fsin(i * 0.1);
-    float y = abs(a - b);
-    z += y;
-    if (mx < y)
-    {
-      mx = y;
-      if (show)
-      {
-        Serial.print(i);
-        Serial.print("\t");
-        Serial.print(a, 6);
-        Serial.print("\t");
-        Serial.print(b, 6);
-        Serial.print("\t");
-        Serial.println(a - b, 6);
-      }
-    }
-  }
-
-  Serial.print("max error: ");
-  Serial.println(mx, 8);
-  Serial.print("avg error: ");
-  Serial.println(z / 3600, 8);
-  Serial.println();
-  delay(10);
-}
-
-void test_fsin_error_4(bool show)
-{
-  Serial.println(__FUNCTION__);
-  Serial.println("FSIN 360-720 calls: \t");
-  delay(10);
-
-  float mx = 0;
-  float z = 0;
-  for ( i = 360; i < 720; i++)
-  {
-    float a = sin(i * PI / 180);
-    float b = fsin(i);
-    float y = abs(a - b);
-    z += y;
-    if (mx < y)
-    {
-      mx = y;
-      if (show)
-      {
-        Serial.print(i);
-        Serial.print("\t");
-        Serial.print(a, 6);
-        Serial.print("\t");
-        Serial.print(b, 6);
-        Serial.print("\t");
-        Serial.println(a - b, 6);
-      }
-    }
-  }
-
-  Serial.print("max error: ");
-  Serial.println(mx, 8);
-  Serial.print("avg error: ");
-  Serial.println(z / 360, 8);
+  Serial.print("max rel error: ");
+  Serial.println(mxr, 8);
+  Serial.print("avg rel error: ");
+  Serial.println(zz / 3600, 8);
   Serial.println();
   Serial.println();
   delay(10);
@@ -306,14 +247,17 @@ void test_itan_error_1(bool show)
   delay(10);
 
   float mx = 0;
+  float mxr = 0;
   float z = 0;
+  float zz = 0;
   for ( i = -0; i < 3600; i++)
   {
-    if ((i + 900 )% 1800 == 0) continue;
+    if ((i + 900 ) % 1800 == 0) continue;
     float a = tan(i * 0.1 * PI / 180);
     float b = itan(i * 0.1);
     float y = abs(a - b);  // abs error - rel error ~ 1%
     z += y;
+    if (a > 0) zz += y / a; // not 100% correct but almost.
     if (mx < y)
     {
       mx = y;
@@ -325,16 +269,33 @@ void test_itan_error_1(bool show)
         Serial.print("\t");
         Serial.print(b, 6);
         Serial.print("\t");
-        Serial.print(a-b, 6);
+        Serial.print(a - b, 6);
         Serial.print("\t");
-        Serial.println((a-b)/a, 6);
+        Serial.println((a - b) / a, 6);
       }
     }
+    if (abs(a) > 0.00001 && mxr < y / a)
+    {
+      //      Serial.print(i);
+      //      Serial.print('\t');
+      //      Serial.print(a, 6);
+      //      Serial.print('\t');
+      //      Serial.print(b, 6);
+      //      Serial.print('\t');
+      //      Serial.print(y/a, 6);
+      //      Serial.println();
+      mxr = y / a;
+    }
   }
-  Serial.print("max error: ");
+  Serial.print("max abs error: ");
   Serial.println(mx, 8);
-  Serial.print("avg error: ");
+  Serial.print("avg abs error: ");
   Serial.println(z / 3600, 8);
+  Serial.print("max rel error: ");
+  Serial.println(mxr, 8);
+  Serial.print("avg rel error: ");
+  Serial.println(zz / 3600, 8);
+  Serial.println();
   Serial.println();
   delay(10);
 }
