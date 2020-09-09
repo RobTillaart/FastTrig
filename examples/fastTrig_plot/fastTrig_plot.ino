@@ -1,11 +1,11 @@
 //
 //    FILE: fastTrig_plot.ino
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.0
+// VERSION: 0.1.1
 // PURPOSE: testing the fastTrigonio functions
 //    DATE: 2020-09-07
 
-// sketch to visualy compare tan(x) and itan(x).
+// sketch to visualy compare tan(x) and itan(x)
 // use IDE.plotter to view.
 
 
@@ -37,11 +37,11 @@ void setup()
     Serial.println();
   }
 
-  for (int i = -1000; i < -800; i++)
+  for (int i = -9100; i < -8900; i++)
   {
-    Serial.print(tan(0.1 * i * PI / 180.0), 6);
+    Serial.print(tan(0.01 * i * PI / 180.0), 6);
     Serial.print("\t");
-    Serial.print(itan(0.1 * i), 6);
+    Serial.print(itan(0.01 * i), 6);
     Serial.println();
   }
   for (int i = -100; i < 100; i++)
@@ -51,7 +51,7 @@ void setup()
     Serial.print(itan(0.1 * i), 6);
     Serial.println();
   }
-  for (int i = 800; i < 1000; i++)
+  for (int i = 850; i < 950; i++)
   {
     Serial.print(tan(0.1 * i * PI / 180.0), 6);
     Serial.print("\t");
