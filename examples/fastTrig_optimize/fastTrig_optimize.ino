@@ -1,7 +1,7 @@
 //
 //    FILE: fastTrig_optimize.ino
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.1
+// VERSION: 0.1.2
 // PURPOSE: sketch to optimize the table for interpolation
 //    DATE: 2020-09-06
 
@@ -29,7 +29,7 @@ void setup()
   Serial.println();
 
   // print the table
-  for (int i = 0; i < 90; i++)
+  for (int i = 0; i <= 90; i++)
   {
     Serial.print(isinTable16[i]);
     Serial.print(", ");
@@ -55,7 +55,7 @@ int optimize()
     int idx = 0;
     float minError = getError(i);  // what is the current error
     bool flag = false;
-    for (int j = -1; j < 1; j++)   // try if adjacent numbers in table give less error.
+    for (int j = -2; j <= 2; j++)   // try if adjacent numbers in table give less error.
     {
       if (j == 0) continue;
       isinTable16[i] = t + j;
@@ -86,7 +86,7 @@ void test_isin_error_1(bool show)
 {
   Serial.println(__FUNCTION__);
   Serial.println("ISIN 0-3600 calls: \t");
-  delay(10);
+  Serial.flush();
 
   float mx = 0;
   float z = 0;
@@ -116,7 +116,7 @@ void test_isin_error_1(bool show)
   Serial.print("avg error: ");
   Serial.println(z / 3600, 8);
   Serial.println();
-  delay(10);
+  Serial.flush();
 }
 
 

@@ -2,7 +2,7 @@
 //
 //    FILE: fastTrig.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.4
+// VERSION: 0.1.5
 // PURPOSE: Arduino library for a faster approximation of sin() and cos()
 //    DATE: 2011-08-18
 //     URL: https://github.com/RobTillaart/fastTrig
@@ -17,13 +17,29 @@
 // 0.1.2    2020-09-06 optimize 16 bit table with example sketch
 // 0.1.3    2020-09-07 initial release.
 // 0.1.4    2020-09-08 rewrite itan() + cleanup + examples
+// 0.1.5    2020-09-11 fixed optimize, new table, added iasin() and iacos()
 
 
 #include "Arduino.h"
 
-
 // 91 x 2 bytes ==> 182 bytes
 // use 65535.0 as divider
+uint16_t isinTable16[] = {
+  0,
+1145, 2289, 3435, 4572, 5716, 6853, 7989, 9125, 10255, 11385,
+12508, 13631, 14745, 15859, 16963, 18067, 19165, 20253, 21342, 22417,
+23489, 24553, 25610, 26659, 27703, 28731, 29755, 30773, 31777, 32772,
+33756, 34734, 35697, 36649, 37594, 38523, 39445, 40350, 41247, 42131,
+42998, 43856, 44701, 45528, 46344, 47147, 47931, 48708, 49461, 50205,
+50933, 51646, 52342, 53022, 53686, 54334, 54969, 55579, 56180, 56760,
+57322, 57866, 58394, 58908, 59399, 59871, 60327, 60768, 61184, 61584,
+61969, 62330, 62677, 63000, 63304, 63593, 63858, 64108, 64334, 64545,
+64731, 64903, 65049, 65177, 65289, 65377, 65449, 65501, 65527, 65535,
+65535
+};
+
+
+/* 0.1.4 table
 uint16_t isinTable16[] = {
   0,
   1145, 2289, 3435, 4571, 5715, 6852, 7988, 9125, 10254, 11385,
@@ -37,6 +53,8 @@ uint16_t isinTable16[] = {
   64731, 64902, 65049, 65177, 65289, 65376, 65449, 65501, 65527, 65535,
   65535
 };
+*/
+
 
 // use 255.0 as divider
 uint8_t isinTable8[] = { 
@@ -52,6 +70,10 @@ uint8_t isinTable8[] = {
   255
 };
 
+///////////////////////////////////////////////////////
+//
+// GONIO LOOKUP
+//
 float isin(float f)
 {
   boolean pos = true;  // positive
@@ -103,7 +125,6 @@ float icos(float x)
   return isin(x - 270.0);  // better than x + 90;
 }
 
-
 float itan(float f)
 {
   // reference
@@ -149,5 +170,49 @@ float itan(float f)
 }
 
 
+///////////////////////////////////////////////////////
+//
+// INVERSE GONIO LOOKUP
+//
+float iasin(float f)
+{
+  bool neg = (f < 0);
+  if (neg)
+  {
+    f = -f;
+    neg = true;
+  }
+  uint16_t val = round(f * 65535);
+  uint8_t lo = 0;
+  uint8_t hi = 90;
+
+  while (hi - lo > 1)
+  {
+    uint8_t mi = (lo + hi) / 2;
+    if (isinTable16[mi] == val)
+    {
+      if (neg) return -mi;
+      return mi;
+    }
+    if (isinTable16[mi] < val) lo = mi;
+    else hi = mi;
+  }  
+  float delta = val - isinTable16[lo];
+  uint16_t range = isinTable16[hi] - isinTable16[lo];
+  delta /= range;
+  if (neg) return -(lo + delta); 
+  return (lo + delta);  
+}
+
+float iacos(float f)
+{
+  return 90 - iasin(f);
+}
+
+// PLACEHOLDER
+float iatan(float f)
+{
+  return 0 * f;
+}
 
 // -- END OF FILE --
