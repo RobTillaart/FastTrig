@@ -54,17 +54,21 @@ unittest(test_new_operator)
 
 unittest(test_isinTable16)
 {
+  fprintf(stderr,"Table16 error is < 0.1% \n");
+  const float degrees2radians = PI/180.0;
   for (int i = 0; i < 91; i++)
   {
-    assertEqualFloat(sin(i * (PI/180.0)), isinTable16[i] / 65535.0, 0.001);
+    assertEqualFloat(sin(i * degrees2radians), isinTable16[i] / 65535.0, 0.001);
   }
 }
 
 unittest(test_isinTable8)
 {
+  fprintf(stderr,"Table8 error is < 1% \n");
+  const float degrees2radians = PI/180.0;
   for (int i = 0; i < 91; i++)
   {
-    assertEqualFloat(sin(i * (PI/180.0)), isinTable8[i] / 255.0, 0.001);
+    assertEqualFloat(sin(i * degrees2radians), isinTable8[i] / 255.0, 0.01);
   }
 }
 
