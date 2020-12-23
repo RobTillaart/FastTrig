@@ -79,7 +79,7 @@ unittest(test_max_error_table16)
   float m = 0;
   for (int i = 0; i < 91; i++)
   {
-    float t = abs(sin(i * degrees2radians) - (isinTable16[i] / 255.0);
+    float t = abs(sin(i * degrees2radians) - (isinTable16[i] / 255.0));
     if (t > m) m = t;
   }
   assertEqualFloat(0, m, 0.001);
@@ -92,7 +92,7 @@ unittest(test_max_error_table8)
   float m = 0;
   for (int i = 0; i < 91; i++)
   {
-    float t = abs(sin(i * degrees2radians) - (isinTable8[i] / 255.0);
+    float t = abs(sin(i * degrees2radians) - (isinTable8[i] / 255.0));
     if (t > m) m = t;
   }
   assertEqualFloat(0, m, 0.01);
