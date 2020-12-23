@@ -82,7 +82,7 @@ unittest(test_max_error_table16)
     float t = abs(sin(i * degrees2radians) - (isinTable16[i] / 65535.0));
     if (t > m) m = t;
   }
-  fprintf(stderr,"%s\n", m);
+  fprintf(stderr,"%2.4f\n", m);
   assertEqualFloat(0, m, 0.001);
 }
 
@@ -96,7 +96,7 @@ unittest(test_max_error_table8)
     float t = abs(sin(i * degrees2radians) - (isinTable8[i] / 255.0));
     if (t > m) m = t;
   }
-  fprintf(stderr,"%s\n", m);
+  fprintf(stderr,"%2.4f\n", m);
   assertEqualFloat(0, m, 0.01);
 }
 
