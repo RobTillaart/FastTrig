@@ -54,7 +54,7 @@ unittest(test_new_operator)
 
 unittest(test_isinTable16)
 {
-  fprintf(stderr,"Table16 error is < 0.1% \n");
+  fprintf(stderr,"Table16 error is < 0.1%% \n");
   const float degrees2radians = PI/180.0;
   for (int i = 0; i < 91; i++)
   {
@@ -64,12 +64,38 @@ unittest(test_isinTable16)
 
 unittest(test_isinTable8)
 {
-  fprintf(stderr,"Table8 error is < 1% \n");
+  fprintf(stderr,"Table8 error is < 1%% \n");
   const float degrees2radians = PI/180.0;
   for (int i = 0; i < 91; i++)
   {
     assertEqualFloat(sin(i * degrees2radians), isinTable8[i] / 255.0, 0.01);
   }
+}
+
+unittest(test_max_error_table16)
+{
+  fprintf(stderr,"Table16 max error\n");
+  const float degrees2radians = PI/180.0;
+  float m = 0;
+  for (int i = 0; i < 91; i++)
+  {
+    float t = abs(sin(i * degrees2radians) - (isinTable16[i] / 255.0);
+    if (t > m) m = t;
+  }
+  assertEqualFloat(0, m, 0.001);
+}
+
+unittest(test_max_error_table8)
+{
+  fprintf(stderr,"Table8 max error\n");
+  const float degrees2radians = PI/180.0;
+  float m = 0;
+  for (int i = 0; i < 91; i++)
+  {
+    float t = abs(sin(i * degrees2radians) - (isinTable8[i] / 255.0);
+    if (t > m) m = t;
+  }
+  assertEqualFloat(0, m, 0.01);
 }
 
 unittest_main()
