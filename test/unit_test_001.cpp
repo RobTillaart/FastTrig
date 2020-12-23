@@ -74,7 +74,7 @@ unittest(test_isinTable8)
 
 unittest(test_max_error_table16)
 {
-  fprintf(stderr,"Table16 max error\n");
+  fprintf(stderr,"Table16 max error: ");
   const float degrees2radians = PI/180.0;
   float m = 0;
   for (int i = 0; i < 91; i++)
@@ -82,12 +82,13 @@ unittest(test_max_error_table16)
     float t = abs(sin(i * degrees2radians) - (isinTable16[i] / 65535.0));
     if (t > m) m = t;
   }
+  fprintf(stderr,"%s\n", m);
   assertEqualFloat(0, m, 0.001);
 }
 
 unittest(test_max_error_table8)
 {
-  fprintf(stderr,"Table8 max error\n");
+  fprintf(stderr,"Table8 max error: ");
   const float degrees2radians = PI/180.0;
   float m = 0;
   for (int i = 0; i < 91; i++)
@@ -95,6 +96,7 @@ unittest(test_max_error_table8)
     float t = abs(sin(i * degrees2radians) - (isinTable8[i] / 255.0));
     if (t > m) m = t;
   }
+  fprintf(stderr,"%s\n", m);
   assertEqualFloat(0, m, 0.01);
 }
 
