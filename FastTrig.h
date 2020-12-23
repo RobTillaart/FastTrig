@@ -1,24 +1,25 @@
 #pragma once
 //
-//    FILE: fastTrig.h
+//    FILE: FastTrig.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.5
+// VERSION: 0.1.6
 // PURPOSE: Arduino library for a faster approximation of sin() and cos()
 //    DATE: 2011-08-18
-//     URL: https://github.com/RobTillaart/fastTrig
+//     URL: https://github.com/RobTillaart/FastTrig
 //          https://forum.arduino.cc/index.php?topic=69723.0
 //
-// HISTORY:
-// 0.1.00   2011-08-18 initial version
-// 0.1.01   2011-08-18 improved tables a bit + changed param to float
-// 0.1.02   2011-08-20 added interpolation
+//  HISTORY:
+//  0.1.00  2011-08-18  initial version
+//  0.1.01  2011-08-18  improved tables a bit + changed param to float
+//  0.1.02  2011-08-20  added interpolation
 //          eons passed
-// 0.1.1    2020-08-30 refactor, create a library out of it.  itan() approximation is bad.
-// 0.1.2    2020-09-06 optimize 16 bit table with example sketch
-// 0.1.3    2020-09-07 initial release.
-// 0.1.4    2020-09-08 rewrite itan() + cleanup + examples
-// 0.1.5    2020-09-11 fixed optimize, new table, added iasin() and iacos()
-
+//  0.1.1   2020-08-30  refactor, create a library out of it.
+//                      itan() approximation is bad.
+//  0.1.2   2020-09-06  optimize 16 bit table with example sketch
+//  0.1.3   2020-09-07  initial release.
+//  0.1.4   2020-09-08  rewrite itan() + cleanup + examples
+//  0.1.5   2020-09-11  fixed optimize, new table, added iasin() and iacos()
+//  0.1.6   2020-12-23  arduino-CI + unit tests
 
 #include "Arduino.h"
 
