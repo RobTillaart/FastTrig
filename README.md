@@ -1,3 +1,9 @@
+
+[![Arduino CI](https://github.com/RobTillaart/FastTrig/workflows/Arduino%20CI/badge.svg)](https://github.com/marketplace/actions/arduino_ci)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/RobTillaart/FastTrig/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/RobTillaart/FastTrig.svg?maxAge=3600)](https://github.com/RobTillaart/FastTrig/releases)
+
+
 # FastTrig
 
 Arduino library with interpolated lookup for sin() and cos(). Trades speed for accuracy.
