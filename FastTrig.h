@@ -179,7 +179,7 @@ float itan(float f)
 float icot(float f)
 {
   float t = itan(f);
-  if (t == 0) return NaN;
+  if (t == 0) return NAN;
   return 1.0 / t;
 }
 
