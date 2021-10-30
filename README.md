@@ -1,5 +1,7 @@
 
 [![Arduino CI](https://github.com/RobTillaart/FastTrig/workflows/Arduino%20CI/badge.svg)](https://github.com/marketplace/actions/arduino_ci)
+[![Arduino-lint](https://github.com/RobTillaart/FastTrig/actions/workflows/arduino-lint.yml/badge.svg)](https://github.com/RobTillaart/FastTrig/actions/workflows/arduino-lint.yml)
+[![JSON check](https://github.com/RobTillaart/FastTrig/actions/workflows/jsoncheck.yml/badge.svg)](https://github.com/RobTillaart/FastTrig/actions/workflows/jsoncheck.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/RobTillaart/FastTrig/blob/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/RobTillaart/FastTrig.svg?maxAge=3600)](https://github.com/RobTillaart/FastTrig/releases)
 
@@ -70,6 +72,7 @@ values outside the 0..360 range.
 
 Please, verify the performance to see if it meets your requirements.
 
+
 ## Accuracy isin icos itan
 
 errors - based upon example sketch - lib version 0.1.5
@@ -93,9 +96,10 @@ UNO calls 0.0 - 360.0 step 0.1 degree
 *Note: 0.1.3 for AVR was bad:   17.41900634 , 0.02249339 , 0.02953807 for itan() *
 
 Strange that the **itan()** on UNO and ESP32 differs (OK same order of magnitude).
-Different implementation of gonio / float math?
+Different implementation of goniometry / float maths?
 
 Please, verify the performance to see if it meets your requirements.
+
 
 ## Performance iasin iacos iatan
 
@@ -113,9 +117,10 @@ time in us - calls -1 ..+1 step 0.001 degree
 |  iatan   |   NI    |   NI      |
 
 - the interpolated reverse lookup is around 30% faster on UNO an 80+% on ESP32
-- iatan is Not Implemented.
+- **iatan()** is **Not** Implemented.
 
 Please, verify the accuracy to see if it meets your requirements.
+
 
 ## Accuracy iasin iacos iatan
 
@@ -131,7 +136,7 @@ ESP32 calls -1 ..+1 step 0.001 degree
 |  iatan   |    NI         |  NI           |  NI           |  NI           |
 
 - largest error at 0.999981 - second largest error 0.052841 at -0.999000
-- iatan is Not Implemented
+- **iatan()** is **Not** Implemented
 
 
 
@@ -144,8 +149,8 @@ UNO calls -1 ..+1 step 0.001 degree
 |  iatan   |    NI         |  NI           |  NI           |  NI           |
 
 - largest error at 0.999981 - second largest error 0.052841 at -0.999000
-- max rel error is high as it occured near zero.
-- iatan is Not Implemented
+- max relative error is high as it occurred near zero.
+- **iatan()** is **Not** Implemented
 
 
 Please, verify the accuracy to see if it meets your requirements.
@@ -188,9 +193,10 @@ There is no **atan()** or **atan2()** replacement.
 
 
 
-## TODO
+## Future
 
 - How to improve the accuracy of the whole degrees, as now the table is optimized for interpolation.
+- 
 
 
 ## Operation
