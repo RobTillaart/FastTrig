@@ -21,7 +21,7 @@ This lookup table is optimized for interpolation so the values for whole degrees
 Furthermore the **itan()** on AVR has almost no performance gain over the regular **tan()** so on AVR one is advised to use **tan()**. 
 On ESP32 the **itan(degrees)** does have a serious performance gain so use it if you need speed.
 
-These functions are to be used as replacements for **sin(radians)**, **cos(radians)**and **tan(radians)**. 
+These functions are to be used as replacements for **sin(radians)**, **cos(radians)** and **tan(radians)**. 
 Important to know is that they are NOT direct replaceable as the parameter differs a factor (PI/180.0) or its inverse.
 
 Similar to ```cos(x) == sin(x + PI)``` it is also true that ```icos(x) == isin(x + 90)```, 
@@ -204,19 +204,18 @@ There is no **atan()** or **atan2()** replacement.
 - Made the % 180 in the **itan()** conditional.
 - added **icot(f)**
 
-
 ## 0.1.9
 
-- update library.json..
-
-
-## Future
-
-- How to improve the accuracy of the whole degrees, as now the table is optimized for interpolation.
-- 
+- update library.json, badges, version string, minor edits.
 
 
 ## Operation
 
 See examples
+
+
+## Future
+
+- How to improve the accuracy of the whole degrees, as now the table is optimized for interpolation.
+- version info in release_notes.md file.
 
