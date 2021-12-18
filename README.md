@@ -16,19 +16,32 @@ Arduino library with interpolated lookup for sin() and cos(). Trades speed for a
 **Warning: The library trades speed for accuracy so use at own risk**
 
 The library provides one lookup table that is used for
-**isin(degrees)** and **icos(degrees)** and **itan(degrees)**. This lookup table is optimized for interpolation so the values for whole degrees are not optimal. Furthermore the **itan()** on AVR has almost no performance gain over the regular **tan()** so on AVR one is adviced to use **tan()**. On ESP32 the **itan(degrees)** does have a serious performance gain so use it if you need speed.
+**isin(degrees)** and **icos(degrees)** and **itan(degrees)**. 
+This lookup table is optimized for interpolation so the values for whole degrees are not optimal. 
+Furthermore the **itan()** on AVR has almost no performance gain over the regular **tan()** so on AVR one is advised to use **tan()**. 
+On ESP32 the **itan(degrees)** does have a serious performance gain so use it if you need speed.
 
-These functions are to be used as replacements for **sin(radians)**, **cos(radians)**and **tan(radians)**. Important to know is that they are NOT direct replaceable as the parameter differs a factor (PI/180.0) or its inverse.
+These functions are to be used as replacements for **sin(radians)**, **cos(radians)** and **tan(radians)**. 
+Important to know is that they are NOT direct replaceable as the parameter differs a factor (PI/180.0) or its inverse.
 
-Similar to ```cos(x) == sin(x + PI)``` it is also true that ```icos(x) == isin(x + 90)```, so **icos()** can use the very same lookup table at the cost of a single addition. In fact it uses ```icos(x) == isin(x - 270)``` as that performs better, 
-due to the folding.
+Similar to ```cos(x) == sin(x + PI)``` it is also true that ```icos(x) == isin(x + 90)```, 
+so **icos()** can use the very same lookup table at the cost of a single addition. 
+In fact it uses ```icos(x) == isin(x - 270)``` as that performs better, due to the folding.
 
-The **i** in the names stands for **int** and **interpolated** as the core is using integer math and lookuptable of 91 uint16_t = 182 bytes. By folding and mirroring the whole 360 degrees and beyond can be handled. When **isin(x)** is called and ```x == int(x)``` then the library will not interpolate and this will improve performance. When x is not a whole number the library will linear interpolate between **isin(int(x))** and **isin(int(x+1))**. Of course this introduces an error but it is quite fast (which was the goal).
+The **i** in the names stands for **int** and **interpolated** as the core is using integer math and lookup table of 91 uint16_t = 182 bytes. 
+By folding and mirroring the whole 360 degrees and beyond can be handled. 
+When **isin(x)** is called and ```x == int(x)``` then the library will not interpolate and this will improve performance. 
+When x is not a whole number the library will linear interpolate between **isin(int(x))** and **isin(int(x+1))**. 
+Of course this introduces an error but it is quite fast (which was the goal).
 
 
 #### Lookup tables
 
-The lookup tables are optimized (sketch provided) to minimize the error when using the interpolation, this implies that the points in the table might not be optimal when you use only wholde degrees. A sketch that generates lookup tables is in the examples folder. This generator sketch can also generate tables with different resolution e.g. 24, 14, 12 or even 6, 5 or 4 bit lookup tables. So depending on the application these tables can be ideal, but verify they meet your requirements.
+The lookup tables are optimized (sketch provided) to minimize the error when using the interpolation, 
+this implies that the points in the table might not be optimal when you use only whole degrees. 
+A sketch that generates lookup tables is in the examples folder. 
+This generator sketch can also generate tables with different resolution e.g. 24, 14, 12 or even 6, 5 or 4 bit lookup tables. 
+So depending on the application these tables can be ideal, but verify they meet your requirements.
 
 The lookup tables used by **isin()** can be used directly in your program, the names are:
 - **isinTable16\[\]** index 0..90, values need to be (float) divided by 65535.0
@@ -191,15 +204,18 @@ There is no **atan()** or **atan2()** replacement.
 - Made the % 180 in the **itan()** conditional.
 - added **icot(f)**
 
+## 0.1.9
 
-
-## Future
-
-- How to improve the accuracy of the whole degrees, as now the table is optimized for interpolation.
-- 
+- update library.json, badges, version string, minor edits.
 
 
 ## Operation
 
 See examples
+
+
+## Future
+
+- How to improve the accuracy of the whole degrees, as now the table is optimized for interpolation.
+- version info in release_notes.md file.
 
