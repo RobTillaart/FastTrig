@@ -13,6 +13,10 @@
 
 #define FAST_TRIG_LIB_VERSION             (F("0.1.10"))
 
+
+extern uint16_t isinTable16[];
+extern uint8_t isinTable8[];
+
 ///////////////////////////////////////////////////////
 //
 // GONIO LOOKUP
