@@ -8,9 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.2.0] - 2022-12-02
 - merged PR #16 for ESP_IDF support
-- moved bool => boolean as basic type (no #defind)
+- added <stdint.h>
+- added <stdbool.h>
 - renamed isinTable to sinTable for readability (breaking change)
-- minor edits code for readability
+- edits code for readability
 - fix itan(90) now returns NAN instead of 0.
 
 ----
