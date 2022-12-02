@@ -9,9 +9,6 @@
 
 
 #include "FastTrig.h"
-#ifdef ESP_PLATFORM
-#define boolean bool
-#endif
 
 
 // 91 x 2 bytes ==> 182 bytes
@@ -69,7 +66,7 @@ uint8_t isinTable8[] = {
 //
 float isin(float f)
 {
-  boolean pos = true;  // positive
+  bool pos = true;  // positive
   if (f < 0)
   {
     f = -f;
