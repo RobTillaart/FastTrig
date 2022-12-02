@@ -66,47 +66,47 @@ uint8_t sinTable8[] = {
 //
 float isin(float f)
 {
-  boolean pos = true;  //  positive
-  if (f < 0)
+  boolean negative = (f < 0);
+  if (negative)
   {
     f = -f;
-    pos = !pos;
+    negative = true;
   }
 
-  long x = f;
-  uint8_t r = (f - x) * 256;
+  long whole = f;
+  uint8_t remain = (f - whole) * 256;
 
-  if (x >= 360) x %= 360;
+  if (whole >= 360) whole %= 360;
 
-  int y = x;  //  16 bit math is faster than 32 bit
+  int y = whole;  //  16 bit math is faster than 32 bit
 
   if (y >= 180)
   {
     y -= 180;
-    pos = !pos;
+    negative = !negative;
   }
 
   if (y >= 90)
   {
     y = 180 - y;
-    if (r != 0)
+    if (remain != 0)
     {
-      r = 255 - r;
+      remain = 255 - remain;
       y--;
     }
   }
 
-  //  float v  improves ~4% on avg error  for ~60 bytes.
-  uint16_t v = sinTable16[y];
+  //  float value  improves ~4% on avg error  for ~60 bytes.
+  uint16_t value = sinTable16[y];
   
   //  interpolate if needed
-  if (r > 0) 
+  if (remain > 0) 
   {
-    v = v + ((sinTable16[y + 1] - v) / 8 * r) /32;   //  == * r / 256
+    value = value + ((sinTable16[y + 1] - value) / 8 * remain) / 32;   //  == * remain / 256
   }
-  float g = v * 0.0000152590219;  //  = /65535.0
-  if (pos) return g;
-  return -g;
+  float g = value * 0.0000152590219;  //  = / 65535.0
+  if (negative) return -g;
+  return g;
 }
 
 
@@ -128,34 +128,34 @@ float itan(float f)
   //  FOLDING
   boolean mirror = false;
   boolean negative = (f < 0);
-  if (neg) f = -f;
+  if (negative) f = -f;
 
-  long x = f;
-  float rem = f - x;
-  if (x >= 180) x %= 180;
-  float v = rem + x;  //  normalised value 0..179.9999
-  if (v > 90)
+  long whole = f;
+  float remain = f - whole;
+  if (whole >= 180) whole %= 180;
+  float value = remain + whole;  //  normalised value 0..179.9999
+  if (value > 90)
   {
-    v = 180 - v;
+    value = 180 - value;
     negative = !negative;
     mirror = true;
   }
-  uint8_t d = v;
-  if (d == 90) return 0;
+  uint8_t d = value;
+  if (d == 90) return NAN;
 
   //  COS FIRST
   uint8_t p = 90 - d;
   float co = sinTable16[p];
-  if (rem != 0)
+  if (remain != 0)
   {
     float delta    = (sinTable16[p] - sinTable16[p - 1]);
-    if (mirror) co = sinTable16[p - 1] + rem * delta;
-    else        co = sinTable16[p]     - rem * delta;
+    if (mirror) co = sinTable16[p - 1] + remain * delta;
+    else        co = sinTable16[p]     - remain * delta;
   }
   else if (co == 0) return 0;
 
   float si = sinTable16[d];
-  if (rem != 0) si += rem * (sinTable16[d + 1]  - sinTable16[d]);
+  if (remain != 0) si += remain * (sinTable16[d + 1]  - sinTable16[d]);
 
   float ta = si/co;
   if (negative) return -ta;
@@ -184,22 +184,22 @@ float iasin(float f)
     f = -f;
     negative = true;
   }
-  uint16_t val = round(f * 65535);
+  uint16_t value = round(f * 65535);
   uint8_t lo = 0;
   uint8_t hi = 90;
 
   while (hi - lo > 1)
   {
     uint8_t mi = (lo + hi) / 2;
-    if (sinTable16[mi] == val)
+    if (sinTable16[mi] == value)
     {
       if (negative) return -mi;
       return mi;
     }
-    if (sinTable16[mi] < val) lo = mi;
+    if (sinTable16[mi] < value) lo = mi;
     else hi = mi;
   }  
-  float delta = val - sinTable16[lo];
+  float delta = value - sinTable16[lo];
   uint16_t range = sinTable16[hi] - sinTable16[lo];
   delta /= range;
   if (negative) return -(lo + delta); 

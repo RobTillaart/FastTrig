@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - moved bool => boolean as basic type (no #defind)
 - renamed isinTable to sinTable for readability (breaking change)
 - minor edits code for readability
+- fix itan(90) now returns NAN instead of 0.
 
 ----
 
