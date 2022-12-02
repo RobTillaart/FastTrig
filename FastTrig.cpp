@@ -66,7 +66,7 @@ uint8_t sinTable8[] = {
 //
 float isin(float f)
 {
-  boolean negative = (f < 0);
+  bool negative = (f < 0);
   if (negative)
   {
     f = -f;
@@ -126,8 +126,8 @@ float itan(float f)
   //  so no divide by 65535
   
   //  FOLDING
-  boolean mirror = false;
-  boolean negative = (f < 0);
+  bool mirror = false;
+  bool negative = (f < 0);
   if (negative) f = -f;
 
   long whole = f;
@@ -178,7 +178,7 @@ float icot(float f)
 //
 float iasin(float f)
 {
-  boolean negative = (f < 0);
+  bool negative = (f < 0);
   if (negative)
   {
     f = -f;

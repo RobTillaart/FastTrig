@@ -1,4 +1,4 @@
-#pragma once
+#pragma once 
 //
 //    FILE: FastTrig.h
 //  AUTHOR: Rob Tillaart
@@ -13,6 +13,8 @@
 
 #ifdef ESP_PLATFORM
 #include <math.h>
+#include <stdint.h>
+#include <stdbool.h>
 #else
 #include "Arduino.h"
 #endif
