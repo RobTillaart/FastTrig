@@ -11,11 +11,19 @@
 // HISTORY: see changelog.md
 
 
+#ifdef ESP_PLATFORM
+#include <math.h>
+#else
 #include "Arduino.h"
+#endif
 
 
 #define FAST_TRIG_LIB_VERSION             (F("0.1.11"))
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 extern uint16_t isinTable16[];
 extern uint8_t isinTable8[];
@@ -48,5 +56,8 @@ float iacos(float f);
 // PLACEHOLDER no good implementation
 float iatan(float f);
 
+#ifdef __cplusplus
+}
+#endif
 
 // -- END OF FILE --
