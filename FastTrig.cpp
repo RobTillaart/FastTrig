@@ -9,6 +9,9 @@
 
 
 #include "FastTrig.h"
+#ifdef ESP_PLATFORM
+#define boolean bool
+#endif
 
 
 // 91 x 2 bytes ==> 182 bytes
