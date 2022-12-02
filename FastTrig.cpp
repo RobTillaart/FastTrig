@@ -1,7 +1,7 @@
 //
 //    FILE: FastTrig.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.11
+// VERSION: 0.2.0
 // PURPOSE: Arduino library for a faster approximation of sin() and cos()
 //    DATE: 2011-08-18
 //     URL: https://github.com/RobTillaart/FastTrig
@@ -9,14 +9,11 @@
 
 
 #include "FastTrig.h"
-#ifdef ESP_PLATFORM
-#define boolean bool
-#endif
 
 
-// 91 x 2 bytes ==> 182 bytes
-// use 65535.0 as divider
-uint16_t isinTable16[] = {
+//  91 x 2 bytes ==> 182 bytes
+//  use 65535.0 as divider
+uint16_t sinTable16[] = {
   0,
 1145, 2289, 3435, 4572, 5716, 6853, 7989, 9125, 10255, 11385,
 12508, 13631, 14745, 15859, 16963, 18067, 19165, 20253, 21342, 22417,
@@ -31,8 +28,8 @@ uint16_t isinTable16[] = {
 };
 
 
-/* 0.1.4 table
-uint16_t isinTable16[] = {
+/*  0.1.4 table
+uint16_t sinTable16[] = {
   0,
   1145, 2289, 3435, 4571, 5715, 6852, 7988, 9125, 10254, 11385,
   12508, 13630, 14745, 15859, 16963, 18067, 19165, 20253, 21342, 22416,
@@ -49,7 +46,7 @@ uint16_t isinTable16[] = {
 
 
 // use 255.0 as divider
-uint8_t isinTable8[] = { 
+uint8_t sinTable8[] = { 
   0, 4, 9, 13, 18, 22, 27, 31, 35, 40, 44,
   49, 53, 57, 62, 66, 70, 75, 79, 83, 87,
   91, 96, 100, 104, 108, 112, 116, 120, 124, 128,
@@ -65,11 +62,11 @@ uint8_t isinTable8[] = {
 
 ///////////////////////////////////////////////////////
 //
-// GONIO LOOKUP
+//  GONIO LOOKUP
 //
 float isin(float f)
 {
-  boolean pos = true;  // positive
+  boolean pos = true;  //  positive
   if (f < 0)
   {
     f = -f;
@@ -81,7 +78,7 @@ float isin(float f)
 
   if (x >= 360) x %= 360;
 
-  int y = x; // 16 bit math is faster than 32 bit
+  int y = x;  //  16 bit math is faster than 32 bit
 
   if (y >= 180)
   {
@@ -99,15 +96,15 @@ float isin(float f)
     }
   }
 
-  // float v  improves ~4% on avg error  for ~60 bytes.
-  uint16_t v = isinTable16[y];
+  //  float v  improves ~4% on avg error  for ~60 bytes.
+  uint16_t v = sinTable16[y];
   
-  // interpolate if needed
+  //  interpolate if needed
   if (r > 0) 
   {
-    v = v + ((isinTable16[y + 1] - v) / 8 * r) /32;   //  == * r / 256
+    v = v + ((sinTable16[y + 1] - v) / 8 * r) /32;   //  == * r / 256
   }
-  float g = v * 0.0000152590219; // = /65535.0
+  float g = v * 0.0000152590219;  //  = /65535.0
   if (pos) return g;
   return -g;
 }
@@ -115,84 +112,77 @@ float isin(float f)
 
 float icos(float x)
 {
-  // prevent modulo math if x in 0..360
-  return isin(x - 270.0);  // better than x + 90;
+  //  prevent modulo math if x in 0..360
+  return isin(x - 270.0);  //  better than x + 90;
 }
 
 
 float itan(float f)
 {
-  // reference
-  // return isin(f)/icos(f);
+  //  reference
+  //  return isin(f)/icos(f);
   
-  // idea is to divide two (interpolated) values from the table 
-  // so no divide by 65535
+  //  idea is to divide two (interpolated) values from the table 
+  //  so no divide by 65535
   
-  // FOLDING
-  bool mir = false;
-  bool neg = (f < 0);
+  //  FOLDING
+  boolean mirror = false;
+  boolean negative = (f < 0);
   if (neg) f = -f;
 
   long x = f;
   float rem = f - x;
   if (x >= 180) x %= 180;
-  float v = rem + x;  // normalised value 0..179.9999
+  float v = rem + x;  //  normalised value 0..179.9999
   if (v > 90)
   {
     v = 180 - v;
-    neg = !neg;
-    mir = true;
+    negative = !negative;
+    mirror = true;
   }
   uint8_t d = v;
   if (d == 90) return 0;
 
-  // COS FIRST
+  //  COS FIRST
   uint8_t p = 90 - d;
-  float co = isinTable16[p];
+  float co = sinTable16[p];
   if (rem != 0)
   {
-    float delta = (isinTable16[p] - isinTable16[p - 1]);
-    if (mir) co = isinTable16[p - 1] + rem * delta;
-    else     co = isinTable16[p]     - rem * delta;
+    float delta    = (sinTable16[p] - sinTable16[p - 1]);
+    if (mirror) co = sinTable16[p - 1] + rem * delta;
+    else        co = sinTable16[p]     - rem * delta;
   }
   else if (co == 0) return 0;
 
-  float si = isinTable16[d];
-  if (rem != 0) si += rem * (isinTable16[d + 1]  - isinTable16[d]);
+  float si = sinTable16[d];
+  if (rem != 0) si += rem * (sinTable16[d + 1]  - sinTable16[d]);
 
   float ta = si/co;
-  if (neg) return -ta;
+  if (negative) return -ta;
   return ta;
 }
 
 
-// some problem at 0 but at least we have a icot(x) cotangent.
+//  some problem at 0 but at least we have a icot(x) cotangent.
 float icot(float f)
 {
-  float t = itan(f);
-  if (t == 0) return NAN;
-  return 1.0 / t;
+  float ta = itan(f);
+  if (ta == 0) return NAN;
+  return 1.0 / ta;
 }
-
-
-// missing function...
-// float cot(float f)
-// {
-  // return 1.0/tan(f);
-// }
 
 
 ///////////////////////////////////////////////////////
 //
-// INVERSE GONIO LOOKUP
+//  INVERSE GONIO LOOKUP
 //
 float iasin(float f)
 {
-  bool neg = (f < 0);
-  if (neg)
+  boolean negative = (f < 0);
+  if (negative)
   {
     f = -f;
-    neg = true;
+    negative = true;
   }
   uint16_t val = round(f * 65535);
   uint8_t lo = 0;
@@ -201,18 +191,18 @@ float iasin(float f)
   while (hi - lo > 1)
   {
     uint8_t mi = (lo + hi) / 2;
-    if (isinTable16[mi] == val)
+    if (sinTable16[mi] == val)
     {
-      if (neg) return -mi;
+      if (negative) return -mi;
       return mi;
     }
-    if (isinTable16[mi] < val) lo = mi;
+    if (sinTable16[mi] < val) lo = mi;
     else hi = mi;
   }  
-  float delta = val - isinTable16[lo];
-  uint16_t range = isinTable16[hi] - isinTable16[lo];
+  float delta = val - sinTable16[lo];
+  uint16_t range = sinTable16[hi] - sinTable16[lo];
   delta /= range;
-  if (neg) return -(lo + delta); 
+  if (negative) return -(lo + delta); 
   return (lo + delta);  
 }
 
@@ -223,11 +213,11 @@ float iacos(float f)
 }
 
 
-// PLACEHOLDER
+//  PLACEHOLDER
 float iatan(float f)
 {
   return 0 * f;
 }
 
 
-// -- END OF FILE --
+//  -- END OF FILE --
