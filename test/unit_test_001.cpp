@@ -91,7 +91,7 @@ unittest(test_max_error_table8)
 
 unittest(test_atanFast)
 {
-  for (float x = -1; x < 1; x += 0.01)
+  for (float x = -10; x < 10; x += 0.1)
   {
     assertEqualFloat(atanFast(x), atan(x), 0.001);
   }

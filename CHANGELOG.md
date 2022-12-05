@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [0.2.1] - 2022-12-05
-- add atanFast(x) => faster and less accurate. limited input range (-1..1)
-- add atan2Fast(y, x) => faster and less accurate. calls atanFast() + offset.
+- add atanFast(x) => faster and less accurate than atan(). 
+  Input range (-1..1) is fastest.
+- add atan2Fast(y, x) => faster and less accurate. 
+  calls atanFast() + offset.
+- add example to measure performance atanFast
+- update readme.md
+- update keywords.txt
 
 
 ## [0.2.0] - 2022-12-02
