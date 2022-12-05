@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.2.1] - 2022-12-05
+- add atanFast(x) => faster and less accurate. limited input range (-1..1)
+- add atan2Fast(y, x) => faster and less accurate. calls atanFast() + offset.
+
+
 ## [0.2.0] - 2022-12-02
 - merged PR #16 for ESP_IDF support
 - added <stdint.h>

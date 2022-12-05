@@ -55,6 +55,16 @@ Although the tables can be written to, it is advised not to do so.
 *OK, the optimize example does a write to improve the table to minimize errors*
 
 
+#### atan, atan2
+
+Since version 0.2.1 two functions are added:
+- **float atanFast(float f)** input range -1 .. 1.
+Returns -PI/2 .. PI/2
+- **float atan2Fast(float y, float x)** all input possible except (0, 0).
+This (0,0) singularity is not checked.
+Returns -PI .. PI
+
+
 ## Performance isin icos itan
 
 time in us - calls 0 - 360 step 1 degree and calls 720 - 1080 (lib version 0.1.5)
@@ -166,6 +176,29 @@ UNO calls -1 ..+1 step 0.001 degree
 
 
 Please, verify the accuracy to see if it meets your requirements.
+
+
+## Performance atanFast, atan2Fast
+
+Times in microseconds.
+
+|  function  |  atan  |  atanF  |  atan2  |  atan2F  |  factor     |
+|:----------:|:------:|:-------:|:-------:|:--------:|:-----------:|
+|  UNO       |  188   |    84   |   196   |   116    |  2.3 - 1.5  |
+|  ESP32     |   56   |    11   |    76   |    17    |  5.0 - 4.4  |
+
+Additional measurements are welcome.
+
+
+
+
+
+Need to be elaborated. (test sketch)
+
+## Accuracy atanFast, atan2Fast
+
+
+
 
 
 ## versions

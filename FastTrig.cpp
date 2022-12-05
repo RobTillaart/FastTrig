@@ -1,7 +1,7 @@
 //
 //    FILE: FastTrig.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.0
+// VERSION: 0.2.1
 // PURPOSE: Arduino library for a faster approximation of sin() and cos()
 //    DATE: 2011-08-18
 //     URL: https://github.com/RobTillaart/FastTrig
@@ -212,12 +212,47 @@ float iacos(float f)
   return 90 - iasin(f);
 }
 
-
 //  PLACEHOLDER
 float iatan(float f)
 {
   return 0 * f;
 }
+
+
+float atanFast(float f)
+{
+  float x2 = x * x;
+  return (((0.079331 * x2) - 0.288679) * x2 + 0.995354) * x;
+
+  //  an even more accurate alternative, less fast
+  //  return ((((-0.0389929 * x2) + 0.1462766) * x2 - 0.3211819) * x2 + 0.9992150) * x;
+}
+
+
+float atan2Fast(float y, float x)
+{
+  if (x >= 0)
+  {
+    if (y >= 0)
+    {
+      if (abs(y) >= abs(x)) return PI / 2 - atanA(x / y);
+      return atanA(y / x);
+    }
+    if (abs(y) >= abs(x)) return -PI / 2 - atanA(x / y);
+    return atanA(y / x);
+  }
+  else
+  {
+    if (y >= 0)
+    {
+      if (abs(y) >= abs(x)) return PI / 2 - atanA(x / y);
+      return PI + atanA(y / x);
+    }
+    if (abs(y) >= abs(x)) return -PI / 2 - atanA(x / y);
+    return -PI + atanA(y / x);
+  }
+}
+
 
 
 //  -- END OF FILE --
