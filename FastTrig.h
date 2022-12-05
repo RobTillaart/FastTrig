@@ -58,6 +58,8 @@ float iatan(float f);
 //  input = -1 .. 1
 float atanFast(float f);
 
+inline float atanHelper(float x);
+
 //  atan2Fast() folds and mirrors => calls atanFast() + offset.
 float atan2Fast(float y, float x);
 

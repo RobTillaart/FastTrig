@@ -221,6 +221,14 @@ float iatan(float f)
 
 float atanFast(float x)
 {
+  if ( x > 1)   return (M_PI/2)  - atanHelper(1.0 / x);
+  if ( x < - 1) return (-M_PI/2) - atanHelper(1.0 / x);
+  return atanHelper(x);
+}
+
+
+inline float atanHelper(float x)
+{
   float x2 = x * x;
   return (((0.079331 * x2) - 0.288679) * x2 + 0.995354) * x;
 
@@ -231,6 +239,9 @@ float atanFast(float x)
 
 float atan2Fast(float y, float x)
 {
+  //  catch singularity.
+  if (x== 0 && y == 0) return NAN;
+
   if (x >= 0)
   {
     if (y >= 0)

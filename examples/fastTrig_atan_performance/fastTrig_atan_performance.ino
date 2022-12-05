@@ -1,7 +1,7 @@
 //    FILE: fastTrig_atan_performance.ino
 //  AUTHOR: Rob Tillaart
 //    DATE: 2022-12-05
-// PURPOSE: demo 
+// PURPOSE: performance and accuracy measurement  
 //     URL: https://github.com/RobTillaart/FastTrig
 
 
@@ -23,10 +23,10 @@ void setup()
 
   x = random(100);
   y = x + random(100);
+  
   start = micros();
   angle = atan(x / y);
   stop = micros();
-
   Serial.println("\natan");
   Serial.println(x / y, 4);
   Serial.println(angle, 4);
@@ -36,17 +36,15 @@ void setup()
   start = micros();
   angle = atanFast(x / y);
   stop = micros();
-
   Serial.println("\natanFast");
-  Serial.println(x / y, 4);
   Serial.println(angle, 4);
   Serial.println(stop - start);
+  delay(10);
+  
   start = micros();
   angle = atan2(y, x);
   stop = micros();
-
   Serial.println("\natan2");
-  Serial.println(x / y, 4);
   Serial.println(angle, 4);
   Serial.println(stop - start);
   delay(10);
@@ -54,12 +52,11 @@ void setup()
   start = micros();
   angle = atan2Fast(y, x);
   stop = micros();
-
   Serial.println("\natan2Fast");
-  Serial.println(x / y, 4);
   Serial.println(angle, 4);
   Serial.println(stop - start);
-
+  delay(10);
+  
   Serial.println("\natan2Fast comparison");
   for (float x = -100; x <= 100; x++)
   {
