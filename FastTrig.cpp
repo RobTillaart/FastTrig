@@ -235,21 +235,21 @@ float atan2Fast(float y, float x)
   {
     if (y >= 0)
     {
-      if (abs(y) >= abs(x)) return PI / 2 - atanFast(x / y);
+      if (fabs(y) >= fabs(x)) return M_PI / 2 - atanFast(x / y);
       return atanFast(y / x);
     }
-    if (abs(y) >= abs(x)) return -PI / 2 - atanFast(x / y);
+    if (fabs(y) >= fabs(x)) return -M_PI / 2 - atanFast(x / y);
     return atanFast(y / x);
   }
   else
   {
     if (y >= 0)
     {
-      if (abs(y) >= abs(x)) return PI / 2 - atanFast(x / y);
-      return PI + atanFast(y / x);
+      if (fabs(y) >= fabs(x)) return M_PI / 2 - atanFast(x / y);
+      return M_PI + atanFast(y / x);
     }
-    if (abs(y) >= abs(x)) return -PI / 2 - atanFast(x / y);
-    return -PI + atanFast(y / x);
+    if (fabs(y) >= fabs(x)) return -M_PI / 2 - atanFast(x / y);
+    return -M_PI + atanFast(y / x);
   }
 }
 

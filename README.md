@@ -187,7 +187,7 @@ Times in microseconds.
 
 |  function  |  atan  |  atanF  |  atan2  |  atan2F  |  factor     |
 |:----------:|:------:|:-------:|:-------:|:--------:|:-----------:|
-|  UNO       |  188   |    84   |   196   |   116    |  2.3 - 1.5  |
+|  UNO       |  188   |    84   |   212   |   108    |  2.3 - 2.0  |
 |  ESP32     |   56   |    11   |    76   |    17    |  5.0 - 4.4  |
 
 Additional measurements are welcome.
