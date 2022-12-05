@@ -219,7 +219,7 @@ float iatan(float f)
 }
 
 
-float atanFast(float f)
+float atanFast(float x)
 {
   float x2 = x * x;
   return (((0.079331 * x2) - 0.288679) * x2 + 0.995354) * x;
@@ -235,21 +235,21 @@ float atan2Fast(float y, float x)
   {
     if (y >= 0)
     {
-      if (abs(y) >= abs(x)) return PI / 2 - atanA(x / y);
-      return atanA(y / x);
+      if (abs(y) >= abs(x)) return PI / 2 - atanFast(x / y);
+      return atanFast(y / x);
     }
-    if (abs(y) >= abs(x)) return -PI / 2 - atanA(x / y);
-    return atanA(y / x);
+    if (abs(y) >= abs(x)) return -PI / 2 - atanFast(x / y);
+    return atanFast(y / x);
   }
   else
   {
     if (y >= 0)
     {
-      if (abs(y) >= abs(x)) return PI / 2 - atanA(x / y);
-      return PI + atanA(y / x);
+      if (abs(y) >= abs(x)) return PI / 2 - atanFast(x / y);
+      return PI + atanFast(y / x);
     }
-    if (abs(y) >= abs(x)) return -PI / 2 - atanA(x / y);
-    return -PI + atanA(y / x);
+    if (abs(y) >= abs(x)) return -PI / 2 - atanFast(x / y);
+    return -PI + atanFast(y / x);
   }
 }
 

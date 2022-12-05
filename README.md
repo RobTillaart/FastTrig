@@ -64,6 +64,9 @@ Returns -PI/2 .. PI/2
 This (0,0) singularity is not checked.
 Returns -PI .. PI
 
+These functions do not use a lookup table but are faster than the default
+atan() and atan2() functions.
+
 
 ## Performance isin icos itan
 
