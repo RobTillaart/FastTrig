@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - fix rounding bug when mirroring 90° for remainder.
 - add examples.
 - update documentation.
+- update library.properties.
 
+----
 
 ## [0.2.1] - 2022-12-05
 - add atanFast(x) => faster and less accurate than atan(). 
@@ -22,7 +24,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - add example to measure performance atanFast
 - update readme.md
 - update keywords.txt
-
 
 ## [0.2.0] - 2022-12-02
 - merged PR #16 for ESP_IDF support
