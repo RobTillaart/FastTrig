@@ -382,8 +382,8 @@ float iatan(float f)
 float atanFast(float x)
 {
   //  remove two test will limit the input range but makes it even faster.
-  if ( x > 1)   return ( M_PI / 2) - atanHelper(1.0 / x);
-  if ( x < - 1) return (-M_PI / 2) - atanHelper(1.0 / x);
+  if ( x > 1)  return ( M_PI / 2) - atanHelper(1.0 / x);
+  if ( x < -1) return (-M_PI / 2) - atanHelper(1.0 / x);
   return atanHelper(x);
 }
 
