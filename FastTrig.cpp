@@ -11,6 +11,10 @@
 #include "FastTrig.h"
 
 
+const float _PI_  = 3.14159265;
+const float _PI_DIV_2_ = _PI_ / 2;
+
+
 //  91 x 2 bytes ==> 182 bytes
 //  use 65535.0 as divider
 uint16_t sinTable16[] = {
@@ -382,8 +386,8 @@ float iatan(float f)
 float atanFast(float x)
 {
   //  remove two test will limit the input range but makes it even faster.
-  if ( x > 1)  return ( M_PI / 2) - atanHelper(1.0 / x);
-  if ( x < -1) return (-M_PI / 2) - atanHelper(1.0 / x);
+  if ( x > 1)  return (_PI_DIV_2_) - atanHelper(1.0 / x);
+  if ( x < -1) return (-_PI_DIV_2_) - atanHelper(1.0 / x);
   return atanHelper(x);
 }
 
@@ -407,21 +411,21 @@ float atan2Fast(float y, float x)
   {
     if (y >= 0)
     {
-      if (fabs(y) >= fabs(x)) return M_PI / 2 - atanFast(x / y);
+      if (fabs(y) >= fabs(x)) return _PI_DIV_2_ - atanFast(x / y);
       return atanFast(y / x);
     }
-    if (fabs(y) >= fabs(x)) return -M_PI / 2 - atanFast(x / y);
+    if (fabs(y) >= fabs(x)) return -_PI_DIV_2_ - atanFast(x / y);
     return atanFast(y / x);
   }
   else
   {
     if (y >= 0)
     {
-      if (fabs(y) >= fabs(x)) return M_PI / 2 - atanFast(x / y);
-      return M_PI + atanFast(y / x);
+      if (fabs(y) >= fabs(x)) return _PI_DIV_2_ - atanFast(x / y);
+      return _PI_ + atanFast(y / x);
     }
-    if (fabs(y) >= fabs(x)) return -M_PI / 2 - atanFast(x / y);
-    return -M_PI + atanFast(y / x);
+    if (fabs(y) >= fabs(x)) return -_PI_DIV_2_ - atanFast(x / y);
+    return -_PI_ + atanFast(y / x);
   }
 }
 

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.3.3] - 2025-03-23
 - fix #28, prevent promotion of constants to double. Kudos to Harrison3000
+- replace M_PI by a const float _PI_ to prevent promotion.
 - update examples
 - update readme.md (minor)
 - minor edits
