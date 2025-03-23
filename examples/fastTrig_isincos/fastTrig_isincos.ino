@@ -3,18 +3,25 @@
 //    DATE: 2022-12-09
 // PURPOSE: R&D
 
+
 #include "Arduino.h"
 #include "FastTrig.h"
+
 
 uint32_t start, stop;
 volatile float x;
 volatile int y;
 
+
 void setup()
 {
   Serial.begin(115200);
   while (!Serial);
+  Serial.println();
   Serial.println(__FILE__);
+  Serial.println("FAST_TRIG_LIB_VERSION: ");
+  Serial.println(FAST_TRIG_LIB_VERSION);
+  Serial.println();
   delay(10);
 
   start = micros();
@@ -155,4 +162,5 @@ void loop()
 }
 
 
-// -- END OF FILE --
+//  -- END OF FILE --
+
