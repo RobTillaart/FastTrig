@@ -4,7 +4,7 @@
 // PURPOSE: testing the itan functions
 //    DATE: 2021-08-10
 //    (c) : MIT
-
+//     URL: https://github.com/RobTillaart/FastTrig
 
 
 #include "FastTrig.h"

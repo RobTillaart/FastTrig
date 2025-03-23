@@ -3,6 +3,7 @@
 //  AUTHOR: Rob Tillaart
 // PURPOSE: testing the fastTrigonio functions
 //    DATE: 2020-09-07
+//     URL: https://github.com/RobTillaart/FastTrig
 
 //  sketch to visually compare tan(x) and itan(x)
 //  use IDE.plotter to view.

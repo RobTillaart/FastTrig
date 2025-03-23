@@ -3,6 +3,7 @@
 //  AUTHOR: Rob Tillaart
 // PURPOSE: playground to play with tables.
 //    DATE: 2020-09-08
+//     URL: https://github.com/RobTillaart/FastTrig
 
 //  NOTES
 //
@@ -79,8 +80,6 @@ void setup()
   while (!Serial);
   Serial.println();
   Serial.println(__FILE__);
-  Serial.println("FAST_TRIG_LIB_VERSION: ");
-  Serial.println(FAST_TRIG_LIB_VERSION);
   Serial.println();
 
   test_accuracy();
@@ -174,4 +173,3 @@ void loop()
 
 
 //  -- END OF FILE --
-

@@ -373,6 +373,7 @@ See examples
 
 #### Should
 
+- clean example headers (consistency)
 - write more tests to verify values.
 - test performance on more platforms.
 - investigate the difference between **isincos()** and **icos()**.

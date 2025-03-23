@@ -4,7 +4,7 @@
 // VERSION: 0.1.1
 // PURPOSE: testing the fastTrigonio functions
 //    DATE: 2020-09-09
-
+//     URL: https://github.com/RobTillaart/FastTrig
 
 
 #include "FastTrig.h"

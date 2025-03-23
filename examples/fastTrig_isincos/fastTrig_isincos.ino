@@ -2,6 +2,7 @@
 //  AUTHOR: Rob Tillaart
 //    DATE: 2022-12-09
 // PURPOSE: R&D
+//     URL: https://github.com/RobTillaart/FastTrig
 
 
 #include "Arduino.h"

@@ -4,13 +4,14 @@
 // PURPOSE: generate look up tables for goniometry functions (and others)
 //          these are not optimized for interpolation.
 //    DATE: 2020-09-08
-
+//     URL: https://github.com/RobTillaart/FastTrig
 
 //  TODO
 //  tables might have some trouble at "max values" CHECK
 
 
 #include "Arduino.h"
+#include "FastTrig.h"
 
 
 void setup()

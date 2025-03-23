@@ -4,7 +4,7 @@
 // PURPOSE: testing the fastTrigonio functions
 //    DATE: 2020-08-30
 //    (c) : MIT
-//
+//     URL: https://github.com/RobTillaart/FastTrig
 
 
 #include "FastTrig.h"
